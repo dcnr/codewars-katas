@@ -75,24 +75,26 @@ class VendingMachine:
                 item_name = self.items[idx]["name"]
                 item_price = self.items[idx]["price"]
 
-                # Out of stock
-                if self.items[idx]["quantity"] == 0:
-                    return f"{item_name}: Out of stock!"
-
                 # Not enough money given
                 if buyer_money < item_price:
                     return "Not enough money!"
 
                 # Vending item with no change needed
                 if buyer_money == item_price:
+                    if self.items[idx]["quantity"] == 0:
+                        return f"{item_name}: Out of stock!"
+
                     self.items[idx]["quantity"] -= 1
                     self.money += buyer_money
                     return f"Vending {item_name}"
 
                 # Vending item with change
+                if self.items[idx]["quantity"] == 0:
+                    return f"{item_name}: Out of stock!"
+
                 change = buyer_money - item_price
                 self.items[idx]["quantity"] -= 1
-                self.money -= change
+                self.money += buyer_money - change
                 return f"Vending {item_name} with {change:.2f} change."
 
         return (
